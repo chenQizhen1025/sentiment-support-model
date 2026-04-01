@@ -1,0 +1,7 @@
+﻿data/SoulChatCorpus/** filter=lfs diff=lfs merge=lfs -text
+data/quality_data/data_source/** filter=lfs diff=lfs merge=lfs -text
+data/processed/*.jsonl filter=lfs diff=lfs merge=lfs -text
+data/processed/sft_stage1/*.jsonl filter=lfs diff=lfs merge=lfs -text
+data/processed/sft_stage2/*.jsonl filter=lfs diff=lfs merge=lfs -text
+data/processed/sft_stage2/*.part-*.jsonl filter=lfs diff=lfs merge=lfs -text
+data/processed/eval/*.jsonl filter=lfs diff=lfs merge=lfs -text

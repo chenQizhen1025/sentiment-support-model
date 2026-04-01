@@ -1,0 +1,52 @@
+{
+  "stage": "sft_stage2",
+  "seed": 42,
+  "source_reports": [
+    {
+      "file_name": "current_single_filtered.jsonl",
+      "mode": "single",
+      "input_records": 17994,
+      "examples_before_dedup": 17994,
+      "examples_after_dedup": 17994,
+      "duplicates_removed": 0
+    },
+    {
+      "file_name": "current_multi_processed_filtered.jsonl",
+      "mode": "multi",
+      "input_records": 19200,
+      "examples_before_dedup": 96000,
+      "examples_after_dedup": 95968,
+      "duplicates_removed": 32
+    },
+    {
+      "file_name": "current_multi_raw_filtered.jsonl",
+      "mode": "multi",
+      "input_records": 17999,
+      "examples_before_dedup": 89995,
+      "examples_after_dedup": 89995,
+      "duplicates_removed": 0
+    },
+    {
+      "file_name": "soulchat_train_filtered.jsonl",
+      "mode": "multi",
+      "input_records": 232059,
+      "examples_before_dedup": 1362995,
+      "examples_after_dedup": 1362267,
+      "duplicates_removed": 728
+    },
+    {
+      "file_name": "soulchat_val_filtered.jsonl",
+      "mode": "multi",
+      "input_records": 25779,
+      "examples_before_dedup": 151275,
+      "examples_after_dedup": 151265,
+      "duplicates_removed": 10
+    }
+  ],
+  "split_sizes": {
+    "train": 1545745,
+    "dev": 85872,
+    "test": 85872
+  },
+  "output_dir": "D:\\Sentiment-SUPPORT\\data\\processed\\sft_stage2"
+}

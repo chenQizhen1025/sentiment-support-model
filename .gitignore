@@ -1,0 +1,22 @@
+﻿# Workspace metadata
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Large local assets not for GitHub
+models/
+experiments/
+MobileLMAPP-main/
+
+# Generated intermediate artifacts
+data/raw/
+data/interim/
+
+# Keep final/source datasets, but skip local-only large artifact that will be chunked for GitHub
+data/processed/sft_stage2/train.jsonl
+
+# Optional local artifacts
+data/reports/model_download_report.json

@@ -1,0 +1,84 @@
+{
+  "soulchat_train": {
+    "format": "jsonl_messages",
+    "sample_count": 232517,
+    "avg_turns": 11.79,
+    "min_turns": 0,
+    "max_turns": 46,
+    "first_role_counts": {
+      "user": 232515,
+      "assistant": 1
+    },
+    "last_role_counts": {
+      "assistant": 221917,
+      "user": 10599
+    },
+    "empty_message_contents": 347,
+    "exists": true,
+    "path": "D:\\Sentiment-SUPPORT\\data\\processed\\train_dedup.jsonl"
+  },
+  "soulchat_val": {
+    "format": "jsonl_messages",
+    "sample_count": 25836,
+    "avg_turns": 11.78,
+    "min_turns": 1,
+    "max_turns": 28,
+    "first_role_counts": {
+      "user": 25836
+    },
+    "last_role_counts": {
+      "assistant": 24681,
+      "user": 1155
+    },
+    "empty_message_contents": 51,
+    "exists": true,
+    "path": "D:\\Sentiment-SUPPORT\\data\\processed\\val_dedup.jsonl"
+  },
+  "current_single": {
+    "format": "single_turn_json",
+    "sample_count": 18000,
+    "empty_question": 0,
+    "empty_answer": 0,
+    "avg_question_len": 228.32,
+    "avg_answer_len": 267.74,
+    "min_question_len": 12,
+    "max_question_len": 6198,
+    "min_answer_len": 18,
+    "max_answer_len": 4721,
+    "exists": true,
+    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\single_turn_data_18k.json"
+  },
+  "current_multi_processed": {
+    "format": "multi_turn_json",
+    "sample_count": 19200,
+    "avg_turns": 10,
+    "min_turns": 10,
+    "max_turns": 10,
+    "first_role_counts": {
+      "user": 19200
+    },
+    "last_role_counts": {
+      "assistant": 19200
+    },
+    "empty_message_contents": 0,
+    "exists": true,
+    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\multi_turn_data_19k_processed.json"
+  },
+  "current_multi_raw": {
+    "format": "multi_turn_json",
+    "sample_count": 18000,
+    "avg_turns": 10.0,
+    "min_turns": 5,
+    "max_turns": 10,
+    "first_role_counts": {
+      "user": 18000
+    },
+    "last_role_counts": {
+      "assistant": 17999,
+      "user": 1
+    },
+    "empty_message_contents": 0,
+    "exists": true,
+    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\multi_turn_data_18k.json"
+  }
+}

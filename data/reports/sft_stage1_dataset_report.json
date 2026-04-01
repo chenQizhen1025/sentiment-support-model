@@ -1,0 +1,28 @@
+{
+  "stage": "sft_stage1",
+  "seed": 42,
+  "source_reports": [
+    {
+      "file_name": "current_single_filtered.jsonl",
+      "mode": "single",
+      "input_records": 17994,
+      "examples_before_dedup": 17994,
+      "examples_after_dedup": 17994,
+      "duplicates_removed": 0
+    },
+    {
+      "file_name": "current_multi_processed_filtered.jsonl",
+      "mode": "multi",
+      "input_records": 19200,
+      "examples_before_dedup": 96000,
+      "examples_after_dedup": 95968,
+      "duplicates_removed": 32
+    }
+  ],
+  "split_sizes": {
+    "train": 102568,
+    "dev": 5697,
+    "test": 5697
+  },
+  "output_dir": "D:\\Sentiment-SUPPORT\\data\\processed\\sft_stage1"
+}

@@ -1,0 +1,12 @@
+{
+  "python_env": "D:/Anaconda/envs/DL/python.exe",
+  "torch_version": "2.8.0+cu128",
+  "cuda_available": true,
+  "cuda_version": "12.8",
+  "device_count": 1,
+  "device_name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "model_source": "modelscope",
+  "repo_id": "Qwen/Qwen3-4B-Instruct-2507",
+  "local_model_dir": "D:\\Sentiment-SUPPORT\\models\\Qwen\\Qwen3-4B-Instruct-2507",
+  "status": "gpu_training_environment_ready_in_DL_env"
+}

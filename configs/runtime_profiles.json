@@ -1,0 +1,20 @@
+﻿{
+  "default_local": {
+    "python_path": "D:/Anaconda/envs/DL/python.exe",
+    "gpu_ids": "0",
+    "num_processes": 1,
+    "description": "当前本地 RTX 3060 单卡训练"
+  },
+  "remote_single_gpu_template": {
+    "python_path": "/path/to/python",
+    "gpu_ids": "0",
+    "num_processes": 1,
+    "description": "远程服务器单卡模板，修改为实际 Python 路径和 GPU 编号"
+  },
+  "remote_multi_gpu_template": {
+    "python_path": "/path/to/python",
+    "gpu_ids": "0,1",
+    "num_processes": 2,
+    "description": "远程服务器多卡模板，使用 accelerate 启动"
+  }
+}

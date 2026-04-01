@@ -1,0 +1,46 @@
+[
+  {
+    "source": "current_multi_processed_standardized.jsonl",
+    "kept": 19200,
+    "dropped": {},
+    "output": "D:\\Sentiment-SUPPORT\\data\\interim\\filtered\\current_multi_processed_filtered.jsonl"
+  },
+  {
+    "source": "current_multi_raw_standardized.jsonl",
+    "kept": 17999,
+    "dropped": {
+      "no_assistant": 1
+    },
+    "output": "D:\\Sentiment-SUPPORT\\data\\interim\\filtered\\current_multi_raw_filtered.jsonl"
+  },
+  {
+    "source": "current_single_standardized.jsonl",
+    "kept": 17994,
+    "dropped": {
+      "message_too_long": 6
+    },
+    "output": "D:\\Sentiment-SUPPORT\\data\\interim\\filtered\\current_single_filtered.jsonl"
+  },
+  {
+    "source": "soulchat_train_standardized.jsonl",
+    "kept": 232059,
+    "dropped": {
+      "empty_content": 91,
+      "too_few_messages": 45,
+      "assistant_too_short": 313,
+      "no_assistant": 8,
+      "first_turn_not_user": 1
+    },
+    "output": "D:\\Sentiment-SUPPORT\\data\\interim\\filtered\\soulchat_train_filtered.jsonl"
+  },
+  {
+    "source": "soulchat_val_standardized.jsonl",
+    "kept": 25779,
+    "dropped": {
+      "assistant_too_short": 42,
+      "empty_content": 12,
+      "too_few_messages": 3
+    },
+    "output": "D:\\Sentiment-SUPPORT\\data\\interim\\filtered\\soulchat_val_filtered.jsonl"
+  }
+]

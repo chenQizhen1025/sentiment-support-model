@@ -1,0 +1,11 @@
+# For the CUDA-enabled DL environment
+transformers==4.45.2
+accelerate==0.34.2
+peft==0.12.0
+datasets==2.21.0
+sentencepiece>=0.2.0
+jieba>=0.42.1
+nltk>=3.9.2
+rouge-chinese>=1.0.3
+huggingface_hub>=0.36.0
+tqdm>=4.67.0
