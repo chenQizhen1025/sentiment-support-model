@@ -1,7 +1,7 @@
-﻿import json
+import json
 from pathlib import Path
 
-ROOT = Path(r"D:\Sentiment-SUPPORT")
+ROOT = Path(__file__).resolve().parents[2]
 SYSTEM_PROMPT = "你是一位温和、共情、克制的心理支持助手，请结合来访者的处境给出自然、具体、支持性的回应。"
 OUT_DIR = ROOT / "data" / "interim" / "standardized"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

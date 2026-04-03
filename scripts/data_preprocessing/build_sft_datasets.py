@@ -3,7 +3,7 @@ import json
 import random
 from pathlib import Path
 
-ROOT = Path(r"D:\Sentiment-SUPPORT")
+ROOT = Path(__file__).resolve().parents[2]
 FILTERED_DIR = ROOT / "data" / "interim" / "filtered"
 REPORT_DIR = ROOT / "data" / "reports"
 STAGE1_DIR = ROOT / "data" / "processed" / "sft_stage1"

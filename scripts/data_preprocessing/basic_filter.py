@@ -1,7 +1,7 @@
-﻿import json
+import json
 from pathlib import Path
 
-ROOT = Path(r"D:\Sentiment-SUPPORT")
+ROOT = Path(__file__).resolve().parents[2]
 IN_DIR = ROOT / "data" / "interim" / "standardized"
 OUT_DIR = ROOT / "data" / "interim" / "filtered"
 REPORT_DIR = ROOT / "data" / "reports"

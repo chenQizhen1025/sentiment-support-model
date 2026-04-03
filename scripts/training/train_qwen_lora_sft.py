@@ -22,14 +22,21 @@ def load_yaml(path: Path):
         return yaml.safe_load(f)
 
 
+def resolve_path(value: str, project_root: Path):
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    return (project_root / path).resolve()
+
+
 def resolve_stage_files(config, stage_name: str):
     stage_cfg = config["data"][stage_name]
     return stage_cfg["train_file"], stage_cfg["dev_file"]
 
 
-def build_output_dir(config, stage_name: str):
+def build_output_dir(config, stage_name: str, project_root: Path):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    root = Path(config["training"]["output_root"])
+    root = resolve_path(config["training"]["output_root"], project_root)
     out_dir = root / stage_name / timestamp
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir, timestamp
@@ -81,15 +88,19 @@ def main():
     parser.add_argument("--stage", required=True, choices=["sft_stage1", "sft_stage2"])
     args = parser.parse_args()
 
-    config = load_yaml(Path(args.config))
+    config_path = Path(args.config).resolve()
+    project_root = config_path.parent.parent
+    config = load_yaml(config_path)
     set_seed(config["training"].get("seed", 42))
 
     train_file, dev_file = resolve_stage_files(config, args.stage)
-    output_dir, run_timestamp = build_output_dir(config, args.stage)
+    train_file = str(resolve_path(train_file, project_root))
+    dev_file = str(resolve_path(dev_file, project_root))
+    output_dir, run_timestamp = build_output_dir(config, args.stage, project_root)
     save_json(output_dir / "resolved_config.json", config)
 
     tokenizer = AutoTokenizer.from_pretrained(
-        config["model"]["model_name_or_path"],
+        str(resolve_path(config["model"]["model_name_or_path"], project_root)),
         trust_remote_code=config["model"].get("trust_remote_code", True),
         use_fast=config["model"].get("use_fast", False),
     )
@@ -104,7 +115,7 @@ def main():
     }.get(dtype_name, torch.bfloat16)
 
     model = AutoModelForCausalLM.from_pretrained(
-        config["model"]["model_name_or_path"],
+        str(resolve_path(config["model"]["model_name_or_path"], project_root)),
         trust_remote_code=config["model"].get("trust_remote_code", True),
         torch_dtype=dtype,
     )
@@ -196,10 +207,12 @@ def main():
     summary = {
         "stage": args.stage,
         "run_timestamp": run_timestamp,
+        "config_path": str(config_path),
+        "project_root": str(project_root),
         "output_dir": str(output_dir),
         "train_file": train_file,
         "dev_file": dev_file,
-        "model_name_or_path": config["model"]["model_name_or_path"],
+        "model_name_or_path": str(resolve_path(config["model"]["model_name_or_path"], project_root)),
         "train_metrics_file": str(output_dir / "train_metrics.json"),
         "eval_metrics_file": str(output_dir / "eval_metrics.json"),
         "log_history_file": str(output_dir / "log_history.json"),
