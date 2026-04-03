@@ -7,13 +7,8 @@ __pycache__/
 *.pyd
 
 # Large local assets not for GitHub
-models/
 experiments/
 MobileLMAPP-main/
-
-# Generated intermediate artifacts
-data/raw/
-data/interim/
 
 # Keep final/source datasets, but skip local-only large artifact that will be chunked for GitHub
 data/processed/sft_stage2/train.jsonl
