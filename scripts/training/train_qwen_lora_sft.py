@@ -32,7 +32,12 @@ def build_output_dir(config, stage_name: str):
     root = Path(config["training"]["output_root"])
     out_dir = root / stage_name / timestamp
     out_dir.mkdir(parents=True, exist_ok=True)
-    return out_dir
+    return out_dir, timestamp
+
+
+def save_json(path: Path, payload):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def build_texts(tokenizer, prompt_messages, response):
@@ -80,7 +85,8 @@ def main():
     set_seed(config["training"].get("seed", 42))
 
     train_file, dev_file = resolve_stage_files(config, args.stage)
-    output_dir = build_output_dir(config, args.stage)
+    output_dir, run_timestamp = build_output_dir(config, args.stage)
+    save_json(output_dir / "resolved_config.json", config)
 
     tokenizer = AutoTokenizer.from_pretrained(
         config["model"]["model_name_or_path"],
@@ -171,18 +177,34 @@ def main():
         data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
     )
 
-    trainer.train()
+    train_result = trainer.train()
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
 
+    train_metrics = dict(train_result.metrics)
+    train_metrics["global_step"] = trainer.state.global_step
+    save_json(output_dir / "train_metrics.json", train_metrics)
+    trainer.save_metrics("train", train_metrics)
+    trainer.save_state()
+
+    eval_metrics = trainer.evaluate()
+    save_json(output_dir / "eval_metrics.json", eval_metrics)
+    trainer.save_metrics("eval", eval_metrics)
+
+    save_json(output_dir / "log_history.json", trainer.state.log_history)
+
     summary = {
         "stage": args.stage,
+        "run_timestamp": run_timestamp,
         "output_dir": str(output_dir),
         "train_file": train_file,
         "dev_file": dev_file,
         "model_name_or_path": config["model"]["model_name_or_path"],
+        "train_metrics_file": str(output_dir / "train_metrics.json"),
+        "eval_metrics_file": str(output_dir / "eval_metrics.json"),
+        "log_history_file": str(output_dir / "log_history.json"),
     }
-    (output_dir / "run_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    save_json(output_dir / "run_summary.json", summary)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 

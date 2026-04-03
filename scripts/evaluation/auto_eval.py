@@ -50,17 +50,28 @@ def compute_metrics(prediction: str, reference: str):
     return scores
 
 
+def resolve_output_path(predictions_path: Path, output_arg: str | None):
+    if output_arg:
+        return Path(output_arg)
+    default_dir = predictions_path.parent / 'results'
+    default_dir.mkdir(parents=True, exist_ok=True)
+    return default_dir / f"{predictions_path.stem}_metrics.json"
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--predictions', required=True, help='JSONL file with fields: id, prediction, reference')
-    parser.add_argument('--output', required=True, help='Output json path')
+    parser.add_argument('--output', default=None, help='Output json path. Defaults to <predictions_dir>/results/<predictions_stem>_metrics.json')
     args = parser.parse_args()
+
+    predictions_path = Path(args.predictions)
+    output_path = resolve_output_path(predictions_path, args.output)
 
     metrics_sum = defaultdict(float)
     count = 0
     details = []
 
-    for item in load_jsonl(Path(args.predictions)):
+    for item in load_jsonl(predictions_path):
         prediction = item['prediction']
         reference = item['reference']
         scores = compute_metrics(prediction, reference)
@@ -78,8 +89,9 @@ def main():
         'average_metrics': averages,
         'details': details,
     }
-    Path(args.output).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
-    print(json.dumps(averages, ensure_ascii=False, indent=2))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(json.dumps({'output_path': str(output_path), 'average_metrics': averages}, ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':
