@@ -7,7 +7,7 @@ model:
   source_platform: modelscope
 
 data:
-  max_length: 1536
+  max_length: 1024
   sft_stage1:
     train_file: data/processed/sft_stage1/train.jsonl
     dev_file: data/processed/sft_stage1/dev.jsonl
@@ -19,15 +19,15 @@ data:
 
 training:
   output_root: experiments/sft
-  per_device_train_batch_size: 1
-  per_device_eval_batch_size: 1
-  gradient_accumulation_steps: 16
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 8
   learning_rate: 2e-5
-  num_train_epochs: 3
-  logging_steps: 10
-  eval_steps: 200
-  save_steps: 200
-  warmup_ratio: 0.03
+  num_train_epochs: 1
+  logging_steps: 20
+  eval_steps: 400
+  save_steps: 400
+  warmup_steps: 200
   lr_scheduler_type: cosine
   weight_decay: 0.01
   save_total_limit: 1
@@ -38,7 +38,14 @@ training:
   bf16: false
   fp16: true
   gradient_checkpointing: true
-  dataloader_num_workers: 2
+  dataloader_num_workers: 4
+  dataloader_pin_memory: true
+  dataloader_persistent_workers: true
+  group_by_length: true
+  length_column_name: length
+  eval_accumulation_steps: 4
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.001
   report_to: none
   seed: 42
   deepspeed: null

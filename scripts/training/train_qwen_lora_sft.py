@@ -12,6 +12,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     DataCollatorForSeq2Seq,
+    EarlyStoppingCallback,
     Trainer,
     TrainingArguments,
     set_seed,
@@ -79,12 +80,27 @@ def build_training_arguments(config, output_dir: Path):
         "load_best_model_at_end": bool(training_cfg.get("load_best_model_at_end", True)),
         "metric_for_best_model": training_cfg.get("metric_for_best_model", "eval_loss"),
         "greater_is_better": bool(training_cfg.get("greater_is_better", False)),
+        "group_by_length": bool(training_cfg.get("group_by_length", False)),
     }
 
     if "warmup_steps" in training_cfg:
         kwargs["warmup_steps"] = int(training_cfg["warmup_steps"])
     else:
         kwargs["warmup_ratio"] = float(training_cfg.get("warmup_ratio", 0.0))
+
+    if "length_column_name" in supported and training_cfg.get("length_column_name"):
+        kwargs["length_column_name"] = training_cfg["length_column_name"]
+
+    if "dataloader_pin_memory" in supported:
+        kwargs["dataloader_pin_memory"] = bool(training_cfg.get("dataloader_pin_memory", True))
+
+    if "dataloader_persistent_workers" in supported:
+        kwargs["dataloader_persistent_workers"] = bool(
+            training_cfg.get("dataloader_persistent_workers", training_cfg.get("dataloader_num_workers", 0) > 0)
+        )
+
+    if "eval_accumulation_steps" in supported and training_cfg.get("eval_accumulation_steps") is not None:
+        kwargs["eval_accumulation_steps"] = int(training_cfg["eval_accumulation_steps"])
 
     if "eval_strategy" in supported:
         kwargs["eval_strategy"] = "steps"
@@ -95,6 +111,7 @@ def build_training_arguments(config, output_dir: Path):
         kwargs["save_only_model"] = bool(training_cfg.get("save_only_model", True))
 
     return TrainingArguments(**kwargs)
+
 
 
 def build_texts(tokenizer, prompt_messages, response):
@@ -129,6 +146,7 @@ def tokenize_example(example, tokenizer, max_length):
         "input_ids": full_ids,
         "attention_mask": [1] * len(full_ids),
         "labels": labels,
+        "length": len(full_ids),
     }
 
 
@@ -212,12 +230,23 @@ def main():
 
     training_args = build_training_arguments(config, output_dir)
 
+    callbacks = []
+    early_stopping_patience = config["training"].get("early_stopping_patience")
+    if early_stopping_patience is not None:
+        callbacks.append(
+            EarlyStoppingCallback(
+                early_stopping_patience=int(early_stopping_patience),
+                early_stopping_threshold=float(config["training"].get("early_stopping_threshold", 0.0)),
+            )
+        )
+
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=tokenized["train"],
         eval_dataset=tokenized["validation"],
         data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
+        callbacks=callbacks,
     )
 
     train_result = trainer.train()
@@ -259,3 +288,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
