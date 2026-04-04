@@ -16,5 +16,9 @@ data/processed/sft_stage2/train.jsonl
 # Optional local artifacts
 data/reports/model_download_report.json
 
-# Oversized model shards rejected by GitHub LFS
-models/
+# Keep only the model directory skeleton in Git
+models/**
+!models/
+!models/Qwen/
+!models/Qwen/Qwen3-4B-Instruct-2507/
+!models/Qwen/Qwen3-4B-Instruct-2507/README.md
