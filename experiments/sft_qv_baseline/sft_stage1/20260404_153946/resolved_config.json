@@ -1,0 +1,55 @@
+{
+  "model": {
+    "model_name_or_path": "models/Qwen/Qwen3-4B-Instruct-2507",
+    "trust_remote_code": true,
+    "use_fast": false,
+    "torch_dtype": "float16",
+    "source_repo": "Qwen/Qwen3-4B-Instruct-2507",
+    "source_platform": "modelscope"
+  },
+  "data": {
+    "max_length": 2048,
+    "sft_stage1": {
+      "train_file": "data/processed/sft_stage1/train.jsonl",
+      "dev_file": "data/processed/sft_stage1/dev.jsonl",
+      "test_file": "data/processed/sft_stage1/test.jsonl"
+    },
+    "sft_stage2": {
+      "train_file": "data/processed/sft_stage2/train.jsonl",
+      "dev_file": "data/processed/sft_stage2/dev.jsonl",
+      "test_file": "data/processed/sft_stage2/test.jsonl"
+    }
+  },
+  "training": {
+    "output_root": "experiments/sft_qv_baseline",
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 2,
+    "gradient_accumulation_steps": 8,
+    "learning_rate": "2e-5",
+    "num_train_epochs": 3,
+    "logging_steps": 10,
+    "eval_steps": 200,
+    "save_steps": 200,
+    "warmup_ratio": 0.03,
+    "lr_scheduler_type": "cosine",
+    "weight_decay": 0.01,
+    "save_total_limit": 2,
+    "bf16": false,
+    "fp16": true,
+    "gradient_checkpointing": true,
+    "dataloader_num_workers": 2,
+    "report_to": "none",
+    "seed": 42,
+    "deepspeed": null,
+    "ddp_find_unused_parameters": false
+  },
+  "lora": {
+    "r": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ]
+  }
+}
