@@ -2,7 +2,7 @@
 from pathlib import Path
 from statistics import mean
 
-ROOT = Path(r"D:\Sentiment-SUPPORT")
+ROOT = Path(__file__).resolve().parents[2]
 REPORT_DIR = ROOT / "data" / "reports"
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
 

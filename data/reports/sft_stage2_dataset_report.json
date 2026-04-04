@@ -48,5 +48,5 @@
     "dev": 85872,
     "test": 85872
   },
-  "output_dir": "D:\\Sentiment-SUPPORT\\data\\processed\\sft_stage2"
+  "output_dir": "data/processed/sft_stage2"
 }

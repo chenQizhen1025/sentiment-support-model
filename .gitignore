@@ -17,4 +17,4 @@ data/processed/sft_stage2/train.jsonl
 data/reports/model_download_report.json
 
 # Oversized model shards rejected by GitHub LFS
-models/**/*.safetensors
+models/

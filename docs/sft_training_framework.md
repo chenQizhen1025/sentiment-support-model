@@ -2,7 +2,7 @@
 
 ## 1. 当前框架做了什么
 
-目前 `D:\Sentiment-SUPPORT` 下已经搭好了一套面向心理支持对话任务的 SFT 训练框架，目标模型为 `Qwen 4B` 系列，训练方法为 `LoRA` 微调。
+目前当前项目里已经搭好了一套面向心理支持对话任务的 SFT 训练框架，目标模型为 `Qwen 4B` 系列，训练方法为 `LoRA` 微调。
 
 这套框架已经包含：
 
@@ -84,7 +84,7 @@
 
 当前配置已经切到本地模型路径：
 
-- `D:\Sentiment-SUPPORT\models\Qwen\Qwen3-4B-Instruct-2507`
+- `models/Qwen/Qwen3-4B-Instruct-2507`
 
 对应来源仓库：
 

@@ -29,25 +29,25 @@
 ### 本地单卡
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_sft_train.ps1 -Stage sft_stage1
+.\scripts\training\run_sft_train.ps1 -Stage sft_stage1
 ```
 
 ### 指定 GPU 编号
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_sft_train.ps1 -Stage sft_stage1 -GpuIds 1
+.\scripts\training\run_sft_train.ps1 -Stage sft_stage1 -GpuIds 1
 ```
 
 ### 指定其他 Python 环境
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_sft_train.ps1 -Stage sft_stage1 -PythonPath "E:\envs\dl\python.exe"
+.\scripts\training\run_sft_train.ps1 -Stage sft_stage1 -PythonPath "<your-python-path>"
 ```
 
 ### 多卡训练
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_sft_train.ps1 -Stage sft_stage2 -GpuIds "0,1" -NumProcesses 2 -UseAccelerate
+.\scripts\training\run_sft_train.ps1 -Stage sft_stage2 -GpuIds "0,1" -NumProcesses 2 -UseAccelerate
 ```
 
 ## 4. 迁移到其他 GPU / 服务器时改什么

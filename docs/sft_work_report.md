@@ -2,7 +2,7 @@
 
 ## 1. 本轮已经完成的工作
 
-本轮已经把 `D:\Sentiment-SUPPORT` 从“只有预处理规划”推进到了“具备可训练能力”的状态，主要完成了三部分：
+本轮已经把当前项目从“只有预处理规划”推进到了“具备可训练能力”的状态，主要完成了三部分：
 
 - 数据预处理链路落地并实际运行
 - `stage1 / stage2` SFT 数据集生成
@@ -93,7 +93,7 @@
 
 Qwen 4B 模型已经通过 ModelScope 下载到本地：
 
-- `D:\Sentiment-SUPPORT\models\Qwen\Qwen3-4B-Instruct-2507`
+- `models/Qwen/Qwen3-4B-Instruct-2507`
 
 ## 6. 当前环境状态
 

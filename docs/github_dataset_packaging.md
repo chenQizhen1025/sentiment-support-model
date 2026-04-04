@@ -12,7 +12,7 @@
 ## Rebuild Command
 
 ```powershell
- = 'D:\\Sentiment-SUPPORT\\data\\processed\\sft_stage2\\train.jsonl'
-Get-ChildItem 'D:\\Sentiment-SUPPORT\\data\\processed\\sft_stage2' -Filter 'train.part-*.jsonl' | Sort-Object Name | Get-Content | Set-Content -LiteralPath \ -Encoding UTF8
+$output = 'data\\processed\\sft_stage2\\train.jsonl'
+Get-ChildItem 'data\\processed\\sft_stage2' -Filter 'train.part-*.jsonl' | Sort-Object Name | Get-Content | Set-Content -LiteralPath $output -Encoding UTF8
 ```
 

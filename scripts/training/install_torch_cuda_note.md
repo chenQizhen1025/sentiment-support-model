@@ -4,7 +4,7 @@
 
 ## ??????
 
-- Python: `D:\Anaconda\envs\DL\python.exe`
+- Python: `python`
 - Torch: `2.8.0+cu128`
 - CUDA Available: `True`
 - GPU: `NVIDIA GeForce RTX 3060 Laptop GPU`
@@ -22,17 +22,17 @@
 ?? CUDA?
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_check_torch_cuda.ps1
+.\scripts\training\run_check_torch_cuda.ps1
 ```
 
 ?? Stage 1?
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_stage1_qwen4b_lora.ps1
+.\scripts\training\run_stage1_qwen4b_lora.ps1
 ```
 
 ?? Stage 2?
 
 ```powershell
-D:\Sentiment-SUPPORT\scripts\training\run_stage2_qwen4b_lora.ps1
+.\scripts\training\run_stage2_qwen4b_lora.ps1
 ```

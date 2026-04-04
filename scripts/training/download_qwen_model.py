@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 from huggingface_hub import snapshot_download
 
-ROOT = Path(r"D:/Sentiment-SUPPORT")
+ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT / "configs" / "sft_qwen4b_lora.yaml"
 
 

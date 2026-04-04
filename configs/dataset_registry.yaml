@@ -1,26 +1,26 @@
-﻿project_root: D:/Sentiment-SUPPORT
+project_root: .
 scope: sft_only
 model_target: qwen_4b_family
 language: zh
 system_prompt: 你是一位温和、共情、克制的心理支持助手，请结合来访者的处境给出自然、具体、支持性的回应。
 datasets:
   soulchat_train:
-    path: D:/Sentiment-SUPPORT/data/processed/train_dedup.jsonl
+    path: data/processed/train_dedup.jsonl
     type: multi_turn
     role: main_multi_turn_source
   soulchat_val:
-    path: D:/Sentiment-SUPPORT/data/processed/val_dedup.jsonl
+    path: data/processed/val_dedup.jsonl
     type: multi_turn
     role: reference_validation_source
   current_single:
-    path: D:/Sentiment-SUPPORT/data/quality_data/data_source/single_turn_data_18k.json
+    path: data/quality_data/data_source/single_turn_data_18k.json
     type: single_turn
     role: domain_anchor_single_turn
   current_multi_processed:
-    path: D:/Sentiment-SUPPORT/data/quality_data/data_source/multi_turn_data_19k_processed.json
+    path: data/quality_data/data_source/multi_turn_data_19k_processed.json
     type: multi_turn
     role: domain_anchor_multi_turn
   current_multi_raw:
-    path: D:/Sentiment-SUPPORT/data/quality_data/data_source/multi_turn_data_18k.json
+    path: data/quality_data/data_source/multi_turn_data_18k.json
     type: multi_turn
     role: secondary_multi_turn_source

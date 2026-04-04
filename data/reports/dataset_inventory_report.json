@@ -15,7 +15,7 @@
     },
     "empty_message_contents": 347,
     "exists": true,
-    "path": "D:\\Sentiment-SUPPORT\\data\\processed\\train_dedup.jsonl"
+    "path": "data/processed/train_dedup.jsonl"
   },
   "soulchat_val": {
     "format": "jsonl_messages",
@@ -32,7 +32,7 @@
     },
     "empty_message_contents": 51,
     "exists": true,
-    "path": "D:\\Sentiment-SUPPORT\\data\\processed\\val_dedup.jsonl"
+    "path": "data/processed/val_dedup.jsonl"
   },
   "current_single": {
     "format": "single_turn_json",
@@ -46,7 +46,7 @@
     "min_answer_len": 18,
     "max_answer_len": 4721,
     "exists": true,
-    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\single_turn_data_18k.json"
+    "path": "data/quality_data/data_source/single_turn_data_18k.json"
   },
   "current_multi_processed": {
     "format": "multi_turn_json",
@@ -62,7 +62,7 @@
     },
     "empty_message_contents": 0,
     "exists": true,
-    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\multi_turn_data_19k_processed.json"
+    "path": "data/quality_data/data_source/multi_turn_data_19k_processed.json"
   },
   "current_multi_raw": {
     "format": "multi_turn_json",
@@ -79,6 +79,6 @@
     },
     "empty_message_contents": 0,
     "exists": true,
-    "path": "D:\\Sentiment-SUPPORT\\data\\quality_data\\data_source\\multi_turn_data_18k.json"
+    "path": "data/quality_data/data_source/multi_turn_data_18k.json"
   }
 }

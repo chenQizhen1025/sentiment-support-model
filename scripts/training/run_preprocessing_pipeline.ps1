@@ -1,5 +1,9 @@
-$root = "D:\Sentiment-SUPPORT"
-$python = "D:\Anaconda\envs\DL\python.exe"
+param(
+    [string]$PythonPath = "python"
+)
+
+$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$python = if ($PythonPath -eq "python") { "python" } else { (Resolve-Path $PythonPath).Path }
 
 & $python "$root\scripts\data_preprocessing\inspect_datasets.py"
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

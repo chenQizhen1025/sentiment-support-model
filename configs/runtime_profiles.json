@@ -1,6 +1,6 @@
 ﻿{
   "default_local": {
-    "python_path": "D:/Anaconda/envs/DL/python.exe",
+    "python_path": "python",
     "gpu_ids": "0",
     "num_processes": 1,
     "description": "当前本地 RTX 3060 单卡训练"
