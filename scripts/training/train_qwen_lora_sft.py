@@ -1,4 +1,5 @@
 import argparse
+import inspect
 import json
 from datetime import datetime
 from pathlib import Path
@@ -45,6 +46,55 @@ def build_output_dir(config, stage_name: str, project_root: Path):
 def save_json(path: Path, payload):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def build_training_arguments(config, output_dir: Path):
+    training_cfg = config["training"]
+    signature = inspect.signature(TrainingArguments.__init__)
+    supported = signature.parameters
+
+    kwargs = {
+        "output_dir": str(output_dir),
+        "per_device_train_batch_size": training_cfg["per_device_train_batch_size"],
+        "per_device_eval_batch_size": training_cfg["per_device_eval_batch_size"],
+        "gradient_accumulation_steps": training_cfg["gradient_accumulation_steps"],
+        "learning_rate": float(training_cfg["learning_rate"]),
+        "num_train_epochs": float(training_cfg["num_train_epochs"]),
+        "logging_steps": training_cfg["logging_steps"],
+        "eval_steps": training_cfg["eval_steps"],
+        "save_steps": training_cfg["save_steps"],
+        "lr_scheduler_type": training_cfg["lr_scheduler_type"],
+        "weight_decay": float(training_cfg["weight_decay"]),
+        "save_total_limit": training_cfg.get("save_total_limit", 1),
+        "bf16": bool(training_cfg.get("bf16", False)),
+        "fp16": bool(training_cfg.get("fp16", False)),
+        "save_strategy": "steps",
+        "logging_strategy": "steps",
+        "remove_unused_columns": False,
+        "report_to": training_cfg.get("report_to", "none"),
+        "seed": training_cfg.get("seed", 42),
+        "dataloader_num_workers": training_cfg.get("dataloader_num_workers", 0),
+        "deepspeed": training_cfg.get("deepspeed"),
+        "ddp_find_unused_parameters": training_cfg.get("ddp_find_unused_parameters", False),
+        "load_best_model_at_end": bool(training_cfg.get("load_best_model_at_end", True)),
+        "metric_for_best_model": training_cfg.get("metric_for_best_model", "eval_loss"),
+        "greater_is_better": bool(training_cfg.get("greater_is_better", False)),
+    }
+
+    if "warmup_steps" in training_cfg:
+        kwargs["warmup_steps"] = int(training_cfg["warmup_steps"])
+    else:
+        kwargs["warmup_ratio"] = float(training_cfg.get("warmup_ratio", 0.0))
+
+    if "eval_strategy" in supported:
+        kwargs["eval_strategy"] = "steps"
+    else:
+        kwargs["evaluation_strategy"] = "steps"
+
+    if "save_only_model" in supported:
+        kwargs["save_only_model"] = bool(training_cfg.get("save_only_model", True))
+
+    return TrainingArguments(**kwargs)
 
 
 def build_texts(tokenizer, prompt_messages, response):
@@ -114,10 +164,17 @@ def main():
         "float32": torch.float32,
     }.get(dtype_name, torch.bfloat16)
 
+    model_kwargs = {
+        "trust_remote_code": config["model"].get("trust_remote_code", True),
+    }
+    if "dtype" in inspect.signature(AutoModelForCausalLM.from_pretrained).parameters:
+        model_kwargs["dtype"] = dtype
+    else:
+        model_kwargs["torch_dtype"] = dtype
+
     model = AutoModelForCausalLM.from_pretrained(
         str(resolve_path(config["model"]["model_name_or_path"], project_root)),
-        trust_remote_code=config["model"].get("trust_remote_code", True),
-        torch_dtype=dtype,
+        **model_kwargs,
     )
 
     lora_cfg = LoraConfig(
@@ -153,32 +210,7 @@ def main():
         desc="Tokenizing SFT dataset",
     )
 
-    training_args = TrainingArguments(
-        output_dir=str(output_dir),
-        per_device_train_batch_size=config["training"]["per_device_train_batch_size"],
-        per_device_eval_batch_size=config["training"]["per_device_eval_batch_size"],
-        gradient_accumulation_steps=config["training"]["gradient_accumulation_steps"],
-        learning_rate=float(config["training"]["learning_rate"]),
-        num_train_epochs=float(config["training"]["num_train_epochs"]),
-        logging_steps=config["training"]["logging_steps"],
-        eval_steps=config["training"]["eval_steps"],
-        save_steps=config["training"]["save_steps"],
-        warmup_ratio=float(config["training"]["warmup_ratio"]),
-        lr_scheduler_type=config["training"]["lr_scheduler_type"],
-        weight_decay=float(config["training"]["weight_decay"]),
-        save_total_limit=config["training"]["save_total_limit"],
-        bf16=bool(config["training"].get("bf16", False)),
-        fp16=bool(config["training"].get("fp16", False)),
-        evaluation_strategy="steps",
-        save_strategy="steps",
-        logging_strategy="steps",
-        remove_unused_columns=False,
-        report_to=config["training"].get("report_to", "none"),
-        seed=config["training"].get("seed", 42),
-        dataloader_num_workers=config["training"].get("dataloader_num_workers", 0),
-        deepspeed=config["training"].get("deepspeed"),
-        ddp_find_unused_parameters=config["training"].get("ddp_find_unused_parameters", False),
-    )
+    training_args = build_training_arguments(config, output_dir)
 
     trainer = Trainer(
         model=model,
@@ -194,6 +226,8 @@ def main():
 
     train_metrics = dict(train_result.metrics)
     train_metrics["global_step"] = trainer.state.global_step
+    train_metrics["best_metric"] = trainer.state.best_metric
+    train_metrics["best_model_checkpoint"] = trainer.state.best_model_checkpoint
     save_json(output_dir / "train_metrics.json", train_metrics)
     trainer.save_metrics("train", train_metrics)
     trainer.save_state()
@@ -213,6 +247,8 @@ def main():
         "train_file": train_file,
         "dev_file": dev_file,
         "model_name_or_path": str(resolve_path(config["model"]["model_name_or_path"], project_root)),
+        "best_metric": trainer.state.best_metric,
+        "best_model_checkpoint": trainer.state.best_model_checkpoint,
         "train_metrics_file": str(output_dir / "train_metrics.json"),
         "eval_metrics_file": str(output_dir / "eval_metrics.json"),
         "log_history_file": str(output_dir / "log_history.json"),
